@@ -156,12 +156,9 @@ export const useArt = (key?: StringPublicKey) => {
 
 export const useExtendedArt = (id?: StringPublicKey) => {
   const { metadata } = useMeta();
-
   const [data, setData] = useState<IMetadataExtension>();
   const { ref, inView } = useInView();
-
   const key = pubkeyToString(id);
-
   const account = useMemo(
     () => metadata.find(a => a.pubkey === key),
     [key, metadata],

@@ -45,7 +45,7 @@ export const ConfettiProvider = ({ children = null as any }) => {
     width: '100vw',
     height: '100vh',
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 10000,
     top: 0,
     left: 0,
   };

@@ -13,7 +13,6 @@ import {
   getTorusWallet,
   WalletName,
 } from '@solana/wallet-adapter-wallets';
-import { Button } from 'antd';
 import React, {
   createContext,
   FC,
@@ -25,7 +24,23 @@ import React, {
   useState,
 } from 'react';
 import { notify } from '../utils';
-import { MetaplexModal } from '../components';
+
+import {
+  Modal,
+  Button,
+  Flex,
+  Image,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Text,
+  VStack,
+  Heading,
+  Grid,
+} from '@chakra-ui/react';
 
 export interface WalletModalContextState {
   visible: boolean;
@@ -50,95 +65,179 @@ export const WalletModal: FC = () => {
   }, [setVisible, setShowWallets]);
 
   return (
-    <MetaplexModal visible={visible} onCancel={close}>
-      <div
-        style={{
-          background:
-            'linear-gradient(180deg, #D329FC 0%, #8F6DDE 49.48%, #19E6AD 100%)',
-          borderRadius: 36,
-          width: 50,
-          height: 50,
-          textAlign: 'center',
-          verticalAlign: 'middle',
-          fontWeight: 700,
-          fontSize: '1.3rem',
-          lineHeight: 2.4,
-          marginBottom: 10,
-        }}
-      >
-        M
-      </div>
+    <Modal isOpen={visible} onClose={close} isCentered size="xl">
+      <ModalOverlay />
+      <ModalContent bg="offblack">
+        <ModalHeader color="white">{}</ModalHeader>
+        <ModalCloseButton color="white" />
+        <ModalBody>
+          <Flex justifyContent="center" my={6}>
+            <Heading color="white" size="md">
+              {selected
+                ? 'Select your wallet provider'
+                : 'You must be signed in to place a bid'}
+            </Heading>
+          </Flex>
+          {selected || showWallets ? (
+            <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+              {wallets.map(wallet => {
+                const onClick = function () {
+                  select(wallet.name);
+                  close();
+                };
 
-      <h2>{selected ? 'Change provider' : 'Welcome to Metaplex'}</h2>
-      <p>
-        {selected
-          ? 'Feel free to switch wallet provider'
-          : 'You must be signed in to place a bid'}
-      </p>
+                return (
+                  <Button
+                    key={wallet.name}
+                    size="large"
+                    width="100%"
+                    textTransform="none"
+                    colorScheme="whiteAlpha"
+                    variant="outline"
+                    py={4}
+                    onClick={onClick}
+                    mb={0}
+                    leftIcon={
+                      <Image
+                        alt={`${wallet.name}`}
+                        width={10}
+                        height={10}
+                        src={wallet.icon}
+                        ml={6}
+                      />
+                    }
+                  >
+                    <VStack flex={1}>
+                      <Text fontSize="lg" textTransform="uppercase">
+                        {wallet.name}
+                      </Text>
+                      <Text fontSize="sm">{wallet.url}</Text>
+                    </VStack>
+                  </Button>
+                );
+              })}
+            </Grid>
+          ) : (
+            <>
+              <Button
+                size="large"
+                width="100%"
+                textTransform="none"
+                colorScheme="whiteAlpha"
+                variant="outline"
+                py={4}
+                onClick={() => {
+                  select(WalletName.Phantom);
+                  close();
+                }}
+                leftIcon={
+                  <Image
+                    alt="Phantom Wallet"
+                    width={10}
+                    height={10}
+                    src="https://www.phantom.app/img/logo.png"
+                    ml={6}
+                  />
+                }
+              >
+                <VStack flex={1}>
+                  <Text fontSize="lg" textTransform="uppercase">
+                    Sign in with Phantom
+                  </Text>
+                </VStack>
+              </Button>
 
-      <br />
-      {selected || showWallets ? (
-        wallets.map(wallet => {
-          return (
-            <Button
-              key={wallet.name}
-              size="large"
-              type={wallet === selected ? 'primary' : 'ghost'}
-              onClick={() => {
-                select(wallet.name);
-                close();
-              }}
-              icon={
-                <img
-                  alt={`${wallet.name}`}
-                  width={20}
-                  height={20}
-                  src={wallet.icon}
-                  style={{ marginRight: 8 }}
-                />
-              }
-              style={{
-                display: 'block',
-                width: '100%',
-                textAlign: 'left',
-                marginBottom: 8,
-              }}
-            >
-              {wallet.name}
-            </Button>
-          );
-        })
-      ) : (
-        <>
-          <Button
-            className="metaplex-button"
-            style={{
-              width: '80%',
-              fontWeight: 'unset',
-            }}
-            onClick={() => {
-              select(WalletName.Phantom);
-              close();
-            }}
-          >
-            <span>
-              <img
-                src="https://www.phantom.app/img/logo.png"
-                style={{ width: '1.2rem' }}
-              />
-              &nbsp;Sign in with Phantom
-            </span>
-            <span>&gt;</span>
+              <Text
+                onClick={_ => setShowWallets(true)}
+                cursor="pointer"
+                mt={10}
+              >
+                Select a different Solana wallet
+              </Text>
+            </>
+          )}
+        </ModalBody>
+
+        <ModalFooter>
+          <Button mr={3} onClick={close}>
+            Close
           </Button>
-          <p
-            onClick={() => setShowWallets(true)}
-            style={{ cursor: 'pointer', marginTop: 10 }}
-          >
-            Select a different Solana wallet
-          </p>
-        </>
-      )}
-    </MetaplexModal>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+
+    // <MetaplexModal visible={visible} onCancel={close}>
+
+    //   <h2>{selected ? 'Change provider' : 'Welcome to Metaplex'}</h2>
+    //   <p>
+    //     {selected
+    //       ? 'Feel free to switch wallet provider'
+    //       : 'You must be signed in to place a bid'}
+    //   </p>
+
+    //   <br />
+    //   {selected || showWallets ? (
+    //     wallets.map(wallet => {
+    //       return (
+    //         <Button
+    //           key={wallet.name}
+    //           size="large"
+    //           type={wallet === selected ? 'primary' : 'ghost'}
+    //           onClick={() => {
+    //             select(wallet.name);
+    //             close();
+    //           }}
+    //           icon={
+    //             <img
+    //               alt={`${wallet.name}`}
+    //               width={20}
+    //               height={20}
+    //               src={wallet.icon}
+    //               style={{ marginRight: 8 }}
+    //             />
+    //           }
+    //           style={{
+    //             display: 'block',
+    //             width: '100%',
+    //             textAlign: 'left',
+    //             marginBottom: 8,
+    //           }}
+    //         >
+    //           {wallet.name}
+    //         </Button>
+    //       );
+    //     })
+    //   ) : (
+    //     <>
+    //       <Button
+    //         className="metaplex-button"
+    //         style={{
+    //           width: '80%',
+    //           fontWeight: 'unset',
+    //         }}
+    //         onClick={() => {
+    //           select(WalletName.Phantom);
+    //           close();
+    //         }}
+    //       >
+    //         <span>
+    //           <img
+    //             src="https://www.phantom.app/img/logo.png"
+    //             style={{ width: '1.2rem' }}
+    //           />
+    //           &nbsp;Sign in with Phantom
+    //         </span>
+    //         <span>&gt;</span>
+    //       </Button>
+    //       <p
+    //         onClick={() => setShowWallets(true)}
+    //         style={{ cursor: 'pointer', marginTop: 10 }}
+    //       >
+    //         Select a different Solana wallet
+    //       </p>
+    //     </>
+    //   )}
+    // </MetaplexModal>
   );
 };
 

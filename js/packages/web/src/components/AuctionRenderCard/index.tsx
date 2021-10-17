@@ -19,6 +19,7 @@ import { useHighestBidForAuction } from '../../hooks';
 import { BN } from 'bn.js';
 
 const { Meta } = Card;
+
 export interface AuctionCard extends CardProps {
   auctionView: AuctionView;
 }
@@ -83,12 +84,12 @@ export const AuctionRenderCard = (props: AuctionCard) => {
       className={`art-card`}
       cover={
         <>
-          <ArtContent
+          {/* <ArtContent
             className="auction-image no-events"
             preview={false}
             pubkey={id}
             allowMeshRender={false}
-          />
+          /> */}
         </>
       }
     >
@@ -96,11 +97,10 @@ export const AuctionRenderCard = (props: AuctionCard) => {
         title={`${name}`}
         description={
           <>
-            <h4 style={{ marginBottom: 0 }}>{label}</h4>
+            <h4>{label}</h4>
             <div className="bids">
               <AmountLabel
-                style={{ marginBottom: 10 }}
-                containerStyle={{ flexDirection: 'row' }}
+                style={{ bg: 'offblack' }}
                 title={label}
                 amount={currentBid}
               />

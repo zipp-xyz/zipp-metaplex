@@ -6,7 +6,6 @@ import {
   useConnection,
   useUserAccounts,
   MetaplexModal,
-  MetaplexOverlay,
   formatAmount,
   formatTokenAmount,
   useMint,
@@ -43,6 +42,8 @@ import {
   BidRedemptionTicket,
   MAX_PRIZE_TRACKING_TICKET_SIZE,
 } from '../../models/metaplex';
+
+import { Heading, Text, HStack } from '@chakra-ui/react';
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
   connection: Connection,
@@ -391,7 +392,7 @@ export const AuctionCard = ({
         {action}
       </Col>
 
-      <MetaplexOverlay visible={showBidPlaced}>
+      <MetaplexModal visible={showBidPlaced}>
         <Confetti />
         <h1
           className="title"
@@ -415,9 +416,9 @@ export const AuctionCard = ({
         <Button onClick={() => setShowBidPlaced(false)} className="overlay-btn">
           Got it
         </Button>
-      </MetaplexOverlay>
+      </MetaplexModal>
 
-      <MetaplexOverlay visible={showRedeemedBidModal}>
+      <MetaplexModal visible={showRedeemedBidModal}>
         <Confetti />
         <h1
           className="title"
@@ -444,7 +445,7 @@ export const AuctionCard = ({
         >
           Got it
         </Button>
-      </MetaplexOverlay>
+      </MetaplexModal>
 
       <MetaplexModal
         visible={showBidModal}
@@ -482,7 +483,7 @@ export const AuctionCard = ({
 
               return (
                 <>
-                  <h2 className="modal-title">Place a bid</h2>
+                  <Heading as="h2">Place a bid</Heading>
                   {!!gapTime && (
                     <div
                       className="info-content"
@@ -545,26 +546,19 @@ export const AuctionCard = ({
                       }
                       placeholder="Amount in SOL"
                     />
-                    <div
-                      style={{
-                        display: 'inline-block',
-                        margin: '5px 20px',
-                        fontWeight: 700,
-                      }}
-                    >
-                      ◎ {formatAmount(balance.balance, 2)}{' '}
-                      <span style={{ color: '#717171' }}>available</span>
-                    </div>
-                    <Link
-                      to="/addfunds"
-                      style={{
-                        float: 'right',
-                        margin: '5px 20px',
-                        color: '#5870EE',
-                      }}
-                    >
-                      Add funds
-                    </Link>
+                    <HStack p={3} justifyContent="space-between">
+                      <Text>
+                        ◎ {formatAmount(balance.balance, 2)} available
+                      </Text>
+                      <Link
+                        to="/addfunds"
+                        style={{
+                          color: '#5870EE',
+                        }}
+                      >
+                        Add funds
+                      </Link>
+                    </HStack>
                   </div>
 
                   <br />

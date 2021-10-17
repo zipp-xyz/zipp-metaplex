@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Statistic } from 'antd';
 import { useSolPrice } from '../../contexts';
 import { formatUSD } from '@oyster/common';
+import { Text, VStack, HStack } from '@chakra-ui/react';
 
 interface IAmountLabel {
+  bg?: string;
   amount: number | string;
   displayUSD?: boolean;
-  title?: string;
+  label?: string;
+  title?: string | boolean | undefined;
   style?: object;
   containerStyle?: object;
+  fontStyle?: object;
 }
 
 export const AmountLabel = (props: IAmountLabel) => {
@@ -17,8 +20,11 @@ export const AmountLabel = (props: IAmountLabel) => {
     displayUSD = true,
     title = '',
     style = {},
-    containerStyle = {},
+    label = '',
+    fontStyle = {},
+    ...otherProps
   } = props;
+
   const amount = typeof _amount === 'string' ? parseFloat(_amount) : _amount;
 
   const solPrice = useSolPrice();
@@ -32,25 +38,26 @@ export const AmountLabel = (props: IAmountLabel) => {
   const PriceNaN = isNaN(amount);
 
   return (
-    <div style={{ display: 'flex', ...containerStyle }}>
-      {PriceNaN === false && (
-        <Statistic
-          style={style}
-          className="create-statistic"
-          title={title || ''}
-          value={amount}
-          prefix="◎"
-        />
-      )}
-      {displayUSD && (
-        <div className="usd">
-          {PriceNaN === false ? (
-            formatUSD.format(priceUSD || 0)
+    <HStack p={2} {...otherProps}>
+      <VStack flex={1} alignItems="flex-start" spacing={0}>
+        {title && PriceNaN === false && (
+          <Text fontSize="lg" {...fontStyle} textTransform="capitalize">
+            {title}
+          </Text>
+        )}
+        {label && PriceNaN === false && <Text fontSize="md">{label}</Text>}
+      </VStack>
+      <VStack spacing={0} alignItems="flex-end">
+        <Text fontSize={24} fontWeight={700}>
+          ◎ {amount}
+        </Text>
+        {displayUSD &&
+          (PriceNaN === false ? (
+            <Text>{formatUSD.format(priceUSD || 0)}</Text>
           ) : (
-            <div className="placebid">Place Bid</div>
-          )}
-        </div>
-      )}
-    </div>
+            <Text>Place Bid</Text>
+          ))}
+      </VStack>
+    </HStack>
   );
 };

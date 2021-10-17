@@ -1,0 +1,2 @@
+export declare const useCreator: (id?: string | undefined) => import("@oyster/common").ParsedAccount<import("../models/metaplex").WhitelistedCreator> | undefined;
+//# sourceMappingURL=useCreator.d.ts.map

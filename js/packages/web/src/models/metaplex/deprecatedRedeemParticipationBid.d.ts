@@ -1,0 +1,4 @@
+import { StringPublicKey } from '@oyster/common';
+import { TransactionInstruction } from '@solana/web3.js';
+export declare function deprecatedRedeemParticipationBid(vault: StringPublicKey, safetyDepositTokenStore: StringPublicKey, destination: StringPublicKey, safetyDeposit: StringPublicKey, bidder: StringPublicKey, payer: StringPublicKey, instructions: TransactionInstruction[], participationPrintingAccount: StringPublicKey, transferAuthority: StringPublicKey, acceptPaymentAccount: StringPublicKey, tokenPaymentAccount: StringPublicKey): Promise<void>;
+//# sourceMappingURL=deprecatedRedeemParticipationBid.d.ts.map

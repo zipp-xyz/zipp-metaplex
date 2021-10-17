@@ -4,11 +4,17 @@
 html {
   overflow-y: scroll;
   width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
 }
+
+#__next {
+  height: 100vh;
+}
+
 #root {
   height: 100%;
-  font-family: 'Graphik Web', sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
 #root::before {
@@ -29,7 +35,7 @@ body {
 
   font-style: normal;
   font-weight: normal;
-  font-family: 'Graphik Web' !important;
+  font-family: 'Raleway' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -131,11 +137,12 @@ code {
   align-items: center;
   letter-spacing: 0.02em;
 
-  color: @text-color-secondary;
+  // color: @text-color-secondary;
 }
 
 .ant-tabs {
   width: 100%;
+  color: rgba(0, 0, 0, 0.75);
 }
 
 .ant-avatar-group .ant-avatar {
@@ -167,7 +174,7 @@ code {
 
 .ant-tabs-tab-active {
   .tab-title {
-    color: @text-color;
+    // color: @text-color;
   }
 }
 
@@ -180,6 +187,25 @@ code {
   color: #fff;
   transition: 150ms;
   padding-top: 5px;
+}
+
+.ant-modal-content {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 16px;
+}
+
+::-moz-selection {
+  background: #00ffa3;
+}
+::-webkit-selection {
+  background: #00ffa3;
+}
+::selection {
+  background: #00ffa3;
+}
+
+.ant-select-selection-item {
+  color: grey
 }
 
 model-viewer {

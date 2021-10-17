@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
+import { VStack, HStack, Flex, Text } from '@chakra-ui/react';
 
 import {
   formatTokenAmount,
@@ -9,7 +10,7 @@ import {
   PriceFloorType,
 } from '@oyster/common';
 import { AuctionView, AuctionViewState, useBidsForAuction } from '../../hooks';
-import { AmountLabel } from '../AmountLabel';
+import { AmountLabel } from 'components';
 
 export const AuctionNumbers = (props: { auctionView: AuctionView }) => {
   const { auctionView } = props;
@@ -48,37 +49,30 @@ export const AuctionNumbers = (props: { auctionView: AuctionView }) => {
   const ended = isEnded(state);
 
   return (
-    <div style={{ minWidth: 350 }}>
-      <Row>
-        {!ended && (
-          <Col span={12}>
-            {(isUpcoming || bids.length === 0) && (
-              <AmountLabel
-                style={{ marginBottom: 10 }}
-                containerStyle={{ flexDirection: 'column' }}
-                title="Starting bid"
-                amount={fromLamports(
-                  participationOnly ? participationFixedPrice : priceFloor,
-                  mintInfo,
-                )}
-              />
-            )}
-            {isStarted && bids.length > 0 && (
-              <AmountLabel
-                style={{ marginBottom: 10 }}
-                containerStyle={{ flexDirection: 'column' }}
-                title="Highest bid"
-                amount={formatTokenAmount(bids[0].info.lastBid, mintInfo)}
-              />
-            )}
-          </Col>
-        )}
-
-        <Col span={ended ? 24 : 12}>
-          <Countdown state={state} />
-        </Col>
-      </Row>
-    </div>
+    <Flex flexDirection="column" width="100%">
+      {!ended && (
+        <>
+          {(isUpcoming || bids.length === 0) && (
+            <AmountLabel
+              containerStyle={{ flexDirection: 'column' }}
+              title="Starting bid"
+              amount={fromLamports(
+                participationOnly ? participationFixedPrice : priceFloor,
+                mintInfo,
+              )}
+            />
+          )}
+          {isStarted && bids.length > 0 && (
+            <AmountLabel
+              containerStyle={{ flexDirection: 'column' }}
+              title="Highest bid"
+              amount={formatTokenAmount(bids[0].info.lastBid, mintInfo)}
+            />
+          )}
+        </>
+      )}
+      <Countdown state={state} />
+    </Flex>
   );
 };
 
@@ -90,74 +84,58 @@ const isEnded = (state?: CountdownState) =>
 
 const Countdown = ({ state }: { state?: CountdownState }) => {
   return (
-    <>
-      <div style={{ width: '100%' }}>
-        <>
-          <div
-            className="info-header"
-            style={{
-              margin: '12px 0',
-              fontSize: 18,
-            }}
-          >
-            Time left
-          </div>
-          {state &&
-            (isEnded(state) ? (
-              <Row style={{ width: '100%' }}>
-                <div className="cd-number">This auction has ended</div>
-              </Row>
-            ) : (
-              <Row style={{ width: '100%', flexWrap: 'nowrap' }}>
-                {state && state.days > 0 && (
-                  <Col>
-                    <div className="cd-number">
-                      {state.days < 10 && (
-                        <span style={{ opacity: 0.2 }}>0</span>
-                      )}
-                      {state.days}
-                      <span style={{ opacity: 0.2 }}>:</span>
-                    </div>
-                    <div className="cd-label">days</div>
-                  </Col>
-                )}
-                <Col>
-                  <div className="cd-number">
-                    {state.hours < 10 && (
-                      <span style={{ opacity: 0.2 }}>0</span>
-                    )}
-                    {state.hours}
+    <HStack p={2} spacing={0}>
+      <VStack flex={1} alignItems="flex-start">
+        <Text fontSize="lg">Time left</Text>
+      </VStack>
+      <HStack>
+        {state &&
+          (isEnded(state) ? (
+            <Text fontSize="lg">This auction has ended</Text>
+          ) : (
+            <>
+              {state && state.days > 0 && (
+                <VStack alignItems="center" spacing={0}>
+                  <Text fontSize={42}>
+                    {state.days < 10 && <span style={{ opacity: 0.2 }}>0</span>}
+                    {state.days}
                     <span style={{ opacity: 0.2 }}>:</span>
-                  </div>
-                  <div className="cd-label">hour</div>
-                </Col>
-                <Col>
-                  <div className="cd-number">
-                    {state.minutes < 10 && (
+                  </Text>
+                  <Text>days</Text>
+                </VStack>
+              )}
+              <VStack alignItems="center" spacing={0}>
+                <Text fontSize={42}>
+                  {state.hours < 10 && <span style={{ opacity: 0.2 }}>0</span>}
+                  {state.hours}
+                  <span style={{ opacity: 0.2 }}>:</span>
+                </Text>
+                <Text>hours</Text>
+              </VStack>
+              <VStack alignItems="center" spacing={0}>
+                <Text fontSize={42}>
+                  {state.minutes < 10 && (
+                    <span style={{ opacity: 0.2 }}>0</span>
+                  )}
+                  {state.minutes}
+                  {state.days === 0 && <span style={{ opacity: 0.2 }}>:</span>}
+                </Text>
+                <Text>mins</Text>
+              </VStack>
+              {!state.days && (
+                <VStack alignItems="center" spacing={0}>
+                  <Text fontSize={42}>
+                    {state.seconds < 10 && (
                       <span style={{ opacity: 0.2 }}>0</span>
                     )}
-                    {state.minutes}
-                    {state.days === 0 && (
-                      <span style={{ opacity: 0.2 }}>:</span>
-                    )}
-                  </div>
-                  <div className="cd-label">mins</div>
-                </Col>
-                {!state.days && (
-                  <Col>
-                    <div className="cd-number">
-                      {state.seconds < 10 && (
-                        <span style={{ opacity: 0.2 }}>0</span>
-                      )}
-                      {state.seconds}
-                    </div>
-                    <div className="cd-label">secs</div>
-                  </Col>
-                )}
-              </Row>
-            ))}
-        </>
-      </div>
-    </>
+                    {state.seconds}
+                  </Text>
+                  <Text>secs</Text>
+                </VStack>
+              )}
+            </>
+          ))}
+      </HStack>
+    </HStack>
   );
 };

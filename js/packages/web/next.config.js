@@ -10,9 +10,9 @@ const plugins = [
       lessLoaderOptions: {
         lessOptions: {
           modifyVars: {
-            '@primary-color': '#768BF9',
-            '@text-color': 'rgba(255, 255, 255)',
-            '@assetPrefix': assetPrefix || "''",
+            // '@primary-color': '#768BF9',
+            // '@text-color': 'rgba(255, 255, 255)',
+            // '@assetPrefix': assetPrefix || "''",
           },
           javascriptEnabled: true,
         },
@@ -22,6 +22,9 @@ const plugins = [
 ];
 
 module.exports = withPlugins(plugins, {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   assetPrefix,
   reactStrictMode: true,
   eslint: {
