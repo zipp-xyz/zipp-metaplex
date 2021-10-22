@@ -37,6 +37,7 @@ export const MusicPlayer = ({ pubkey }) => {
             height="250px"
             objectFit="cover"
             borderRadius={6}
+            fallbackSrc="https://stefan-kovac-random.s3.us-east-2.amazonaws.com/fallback-image.png"
             transition="0.3s ease-in-out"
             boxShadow="rgb(0, 0, 0) 0px 4px 12px;"
             _hover={{

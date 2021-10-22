@@ -21,12 +21,14 @@ import { Flex } from '@chakra-ui/react';
 export interface AuctionCardNew {
   auctionView: AuctionView;
   to?: string;
+  image?: string;
+  animationURL?: string;
   onClick?: () => void;
 }
 
 export const AuctionRenderCardNew = (props: AuctionCardNew, ...otherProps) => {
   const [isHovering, setIsHovering] = useState(false);
-  const { auctionView, onClick, to } = props;
+  const { auctionView, onClick, to, image, animationURL } = props;
   const id = auctionView.thumbnail.metadata.pubkey;
   const art = useArt(id);
   const name = art?.title || ' ';
@@ -108,12 +110,10 @@ export const AuctionRenderCardNew = (props: AuctionCardNew, ...otherProps) => {
       >
         <ArtContentNew
           pubkey={id}
-          // uri={image}
-          // animationURL={animationURL}
+          uri={image}
+          animationURL={animationURL}
           // category={category}
           // preview={preview}
-          // height={height}
-          // width={width}
         />
       </Flex>
       <Link to={to || ''}>
