@@ -22,6 +22,7 @@ import {
   Flex,
   CircularProgress,
 } from '@chakra-ui/react';
+import { constants } from 'node:buffer';
 
 export enum LiveAuctionViewState {
   All = '0',
@@ -79,27 +80,7 @@ export const Explore = () => {
     )
     .filter(a => !resaleAuctions.includes(a));
 
-  let items = liveAuctions;
-
-  switch (activeIndex) {
-    case 0: // LiveAuctionViewState.All:
-      items = liveAuctions;
-      break;
-    case 1: // LiveAuctionViewState.Participated:
-      items = liveAuctions
-        .concat(auctionsEnded)
-        .filter(
-          (m, idx) =>
-            m.myBidderMetadata?.info.bidderPubkey == publicKey?.toBase58(),
-        );
-      break;
-    case 2: //LiveAuctionViewState.Resale:
-      items = resaleAuctions;
-      break;
-    case 3: //LiveAuctionViewState.Ended:
-      items = auctionsEnded;
-      break;
-  }
+  const items = liveAuctions;
 
   const heroAuction = useMemo(
     () =>
@@ -177,8 +158,8 @@ export const Explore = () => {
         <Tabs
           // activeKey={activeKey}
           isFitted
+          index={activeIndex}
           onChange={index => setActiveIndex(index)}
-          // setActiveKey(key as LiveAuctionViewState)}
           width="100%"
         >
           <TabList>
@@ -188,22 +169,16 @@ export const Explore = () => {
             {connected && <Tab>Participated</Tab>}
           </TabList>
           <TabPanels>
-            <TabPanel
-            // key={LiveAuctionViewState.All}
-            >
+            <TabPanel>
               <SimpleGrid columns={3}>{liveAuctionsView}</SimpleGrid>
             </TabPanel>
             {auctionsEnded.length > 0 && (
-              <TabPanel
-              // key={LiveAuctionViewState.Resale}
-              >
+              <TabPanel>
                 <SimpleGrid columns={3}>{liveAuctionsView}</SimpleGrid>
               </TabPanel>
             )}
             {auctionsEnded.length > 0 && (
-              <TabPanel
-              // key={LiveAuctionViewState.Ended}
-              >
+              <TabPanel>
                 <SimpleGrid columns={3}>{endedAuctions}</SimpleGrid>
               </TabPanel>
             )}
